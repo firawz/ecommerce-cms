@@ -73,7 +73,7 @@ describe("POST /login case Berhasil", function(){
   test('test login gagal', function(done){
     request(app)
     .post('/login')
-    .send({email:"firaz@hot.id", password:""})
+    .send({email:"firaz@hot.id", password:"1243123414"})
     .set('Accept', 'application/json')
     .then(response=>{
         const {status, body} = response

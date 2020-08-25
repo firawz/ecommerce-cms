@@ -25,7 +25,7 @@ class UserController {
         
         try{
 
-            const {name, image_url,price,stock} = req.body
+            const {name, image_url, price, stock} = req.body
             const newData = await Product.create({name,image_url,price,stock})
             res.status(201).json({newData})
             
@@ -41,7 +41,7 @@ class UserController {
         
         try{
 
-            const {name, image_url,price,stock} = req.body
+            const {name, image_url, price, stock} = req.body
             const currentData = await Product.findByPk(req.params.id)
             if(!currentData){
                 return next({errorCode : "INVALID_DATA"})

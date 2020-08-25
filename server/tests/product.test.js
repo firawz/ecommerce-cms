@@ -3,22 +3,28 @@ const app = require('../app');
 const { sequelize, Product, User } = require('../models')
 const { queryInterface } = sequelize
 const { JWT, Bcrypt } = require('../helpers')
-const productData = { name: 'Bajuaaaaaaaaaaaaa Saint Michael', image_url: '123456', price: 50000, stock: 10 }
 
+const productData = { name: 'Bajuaaaaaaaaaaaaa Saint Michael', image_url: '123456', price: 50000, stock: 10 }
 const falseProduct = { name: 'Bajuaaaaaaaaaaaaa Saint Michael', image_url: '123456', price: 50, stock: 'asd' }
-const userData = { email: 'rawz23@hot.id', password: '123456' }
-let id
-let access_token = ''
+let id = ''
+let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nzc2LCJlbWFpbCI6InJhd3pAaG90LmlkIiwiaWF0IjoxNTk4MzMyNjgxfQ.QgTQaiYbWZCmk50ETUL9t2ljrhPCl5VKoIRLvwSVQo8'
 
 beforeAll(() => {
     Product.create(productData)
         .then(product => {
-            access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc3LCJlbWFpbCI6InJhd3pAaG90LmlkIiwiaWF0IjoxNTk3NzY0MTM5fQ.Sg3dYDex8gN_fwdiSw9NlNaRQYUGDZBMZgqBiUximBk'
         })
         .catch(err => {
             // console.log(err)
         })
 })
+// afterAll(()=>{
+
+//     queryInterface.bulkDelete("Products",{})
+//     .then(() => done())
+//     .catch(err=>{
+//       done()
+//     })
+// })
 
 // POST PRODUCTS
 describe("POST /Products case berhasil menambahkan product", function() {
@@ -27,12 +33,12 @@ describe("POST /Products case berhasil menambahkan product", function() {
             .post('/products')
             .send(productData)
             .set('Accept', 'application/json')
-            .set('access_token', `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc3LCJlbWFpbCI6InJhd3pAaG90LmlkIiwiaWF0IjoxNTk3NzY0MTM5fQ.Sg3dYDex8gN_fwdiSw9NlNaRQYUGDZBMZgqBiUximBk`)
+            .set('access_token', access_token)
             .then(response => {
                 const { status, body } = response
-                id = body.newData.id
                 expect(status).toBe(201)
                 expect(body).toHaveProperty("newData", expect.any(Object))
+                id = body.newData.id
                 done()
             })
     })
@@ -42,7 +48,7 @@ describe("POST /Products case berhasil menambahkan product", function() {
             .post('/products')
             .send(falseProduct)
             .set('Accept', 'application/json')
-            .set('access_token', `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc3LCJlbWFpbCI6InJhd3pAaG90LmlkIiwiaWF0IjoxNTk3NzY0MTM5fQ.Sg3dYDex8gN_fwdiSw9NlNaRQYUGDZBMZgqBiUximBk`)
+            .set('access_token', access_token)
             .then(response => {
                 const { status, body } = response
                 expect(status).toBe(400)
@@ -58,7 +64,7 @@ describe("GET /Products case berhasil menampilkan product", function() {
         request(app)
             .get('/products')
             .set('Accept', 'application/json')
-            .set('access_token', `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc3LCJlbWFpbCI6InJhd3pAaG90LmlkIiwiaWF0IjoxNTk3NzY0MTM5fQ.Sg3dYDex8gN_fwdiSw9NlNaRQYUGDZBMZgqBiUximBk`)
+            .set('access_token', access_token)
             .then(response => {
                 const { status, body } = response
                 // console.log(status, ',==================== ini status')
@@ -72,7 +78,7 @@ describe("GET /Products case berhasil menampilkan product", function() {
         request(app)
             .post('/products')
             .set('Accept', 'application/json')
-            .set('access_token', `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc3LCJlbWFpbCI6InJhd3pAaG90LmlkIiwiaWF0IjoxNTk3NzY0MTM5fQ.Sg3dYDex8gN_fwdiSw9NlNaRQ`)
+            .set('access_token', `bGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc3LCJlbWFpbCI6InJhd3pAaG90LmlkIiwiaWF0IjoxNTk3NzY0MTM5fQ.Sg3dYDex8gN_fwdiSw9NlNaRQ`)
             .then(response => {
                 const { status, body } = response
                 expect(status).toBe(401)
@@ -90,7 +96,7 @@ describe("PUT /Products/:id case berhasil update product", function() {
             .put(`/products/${id}`)
             .set('Accept', 'application/json')
             .send(productData)
-            .set('access_token', `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc3LCJlbWFpbCI6InJhd3pAaG90LmlkIiwiaWF0IjoxNTk3NzY0MTM5fQ.Sg3dYDex8gN_fwdiSw9NlNaRQYUGDZBMZgqBiUximBk`)
+            .set('access_token', access_token)
             .then(response => {
                 const { status, body } = response
                 // console.log(status, ',==================== ini status')
@@ -122,7 +128,7 @@ describe("DELETE /Products/:id case berhasil Delete product", function() {
         request(app)
             .delete(`/products/${id}`)
             .set('Accept', 'application/json')
-            .set('access_token', `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc3LCJlbWFpbCI6InJhd3pAaG90LmlkIiwiaWF0IjoxNTk3NzY0MTM5fQ.Sg3dYDex8gN_fwdiSw9NlNaRQYUGDZBMZgqBiUximBk`)
+            .set('access_token', access_token)
             .then(response => {
                 const { status, body } = response
                 // console.log(status, ',==================== ini status')

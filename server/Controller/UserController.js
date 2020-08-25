@@ -6,28 +6,24 @@ class UserController{
     static async register(req, res, next){
         try{
             const {email, password} = req.body
-            let role = 'User'
-            
+            let role = "user"
             const newUser = await User.create({email,password,role})
             if(newUser) {
                 return res.status(201).json({email:newUser.email, role: newUser.role, message:"Success Register"})
             }
             
         }catch(err){
-            // console.log(err, '<========================================')
             next(err)
         }
-        
     }
 
     static async login(req, res, next){
         try{
             // console.log(req.body)
             const {email, password} = req.body
-            let role = "User"
             
             const user = await User.findOne({where: {email}})
-            if(!email){
+            if(!user){
                 next({errorCode : 'INVALID_USER'})
             }
             else{
@@ -37,7 +33,7 @@ class UserController{
                 }
                 else{
                     const token = JWT.generateToken(user)
-                    res.status(200).json({id:user.email, role:user.role ,token})
+                    res.status(200).json({id:user.id, email:user.email, role:user.role ,token})
                 }
             }
 

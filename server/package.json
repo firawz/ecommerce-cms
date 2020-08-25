@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --forceExit --runInBand --watchAll"
+    "test": "jest --detectOpenHandles --forceExit --runInBand --watchAll",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "Firaz Project Ecommerce",

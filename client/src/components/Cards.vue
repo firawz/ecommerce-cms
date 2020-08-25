@@ -1,47 +1,36 @@
 <template>
   <div>
-  <b-card class="h-100 mx-4 my-4" :title=product.name
-    :img-src=product.image_url
-    img-top
-    tag="article"
-    style="max-width: 20rem;"
-  >
-  Price : {{product.price}}
-  <br>
-  <br>
-  stock : {{product.stock}}
-  <br>
-  <br>
-    <b-row>
-    <b-col><b-button @click.prevent='updateProduct(product.id)' variant="outline-primary">Primary</b-button></b-col>
-    <b-col>Update</b-col>
-    <b-col><b-button @click.prevent='deleteProduct(product.id)' variant="outline-danger">Delete</b-button></b-col>
-  </b-row>
-  </b-card>
-</div>
+      <div class="mx-lg-5 my-lg-5">
+        <b-card :title="product.name" :img-src="product.image_url" img-alt="Image" img-top
+          tag="article" style="max-width: 20rem;" class="mb-2">
+          <b-card-text> <br>
+            Price: <br>
+            Rp.{{product.price}}
+          </b-card-text>
+          <br>
+            STOCK : {{product.stock}}
+            <br>
+            <br>
+            <div class="row mx-auto justify-content-around">
+          <b-button size="md" class="rounded-pill" variant="outline-success">Update</b-button>
+          <b-button @click.prevent='deleteProduct(product.id)' class="rounded-pill" variant="outline-danger">Delete</b-button>
+            </div>
+        </b-card>
+      </div>
+    </div>
 </template>
 
 <script>
-import axios from 'axios'
-import router from '../router'
+import { mapActions } from 'vuex'
 export default {
+  name: 'Cards',
   props: ['product'],
   methods: {
+    ...mapActions([
+      'deleteProducts'
+    ]),
     deleteProduct (id) {
-      axios({
-        url: `http://localhost:3000/products/${id}`,
-        method: 'delete',
-        headers: {
-          access_token: localStorage.token
-        }
-      })
-        .then(res => {
-          this.$store.commit('fetchData')
-          router.push('/products')
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      this.deleteProducts(id)
     }
   }
 }

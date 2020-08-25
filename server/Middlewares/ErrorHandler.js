@@ -1,8 +1,9 @@
 function errorHandler(err, req, res, next){
     let statusCode = 500
-
     let Message = ['Internal Server Error']
+
     let array = []
+    
     if(err.errorCode == 'INVALID_USER' || err.name == 'JsonWebTokenError' || err.errorCode == 'INVALID_TOKEN'){
         Message = ['Incorrect Username or Password']
         array.push(Message)
