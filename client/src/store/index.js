@@ -49,6 +49,19 @@ export default new Vuex.Store({
         }).catch(err => {
           console.log(err)
         })
+    },
+    updateProducts ({ dispatch }, data) {
+      axios({
+        method: 'put',
+        url: `products/${data.id}`,
+        data: { name: data.name, image_url: data.image_url, price: data.price, stock: data.stock },
+        headers: { access_token: localStorage.token }
+      })
+        .then(({ data }) => {
+          dispatch('fetchProducts')
+        }).catch(err => {
+          console.log(err)
+        })
     }
   },
   modules: {
